@@ -1,7 +1,0 @@
-organization=christianbarrerauniversidad
-projectKey=expense-tracker-api
-serverUrl=https://sonarcloud.io
-serverVersion=8.0.0.102702
-dashboardUrl=https://sonarcloud.io/dashboard?id=expense-tracker-api
-ceTaskId=AaBQ-w6ef9Nruu8lMnKs
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AaBQ-w6ef9Nruu8lMnKs
