@@ -137,3 +137,32 @@ docker exec <container_id> whoami
 ```
 
 Debería responder `node`, no `root` — es la medida de seguridad principal del `Dockerfile` (ver comentarios dentro del archivo para el detalle de cada instrucción).
+
+## Uso de IA como apoyo
+
+Se utilizó IA (Claude) como copiloto durante el desarrollo, revisando y validando cada propuesta antes de aplicarla. A continuación, los prompts más relevantes usados y qué aportó cada uno:
+
+### 1. Estructura inicial del proyecto
+> "Ayúdame a diseñar la estructura de una API REST en Node.js/Express para un gestor de gastos personales, con endpoints para crear, listar (con filtro por categoría), obtener un resumen de totales, actualizar y eliminar gastos. Antes de darme código, explícame qué archivos y carpetas propones y por qué."
+
+**Aportó:** la arquitectura en capas (repository → service → controller → routes), con cada archivo responsable de una sola cosa, lo que facilitó agregar los endpoints restantes sin reescribir código ya probado.
+
+### 2. Generación del README
+> "Genera un README.md para este proyecto de gestor de gastos en Node.js/Express. Debe incluir: descripción breve, requisitos previos, pasos para instalar y correr localmente, la lista de los 5 endpoints con método, URL y ejemplo de body, y un espacio en blanco para las instrucciones de Docker. Explícame por qué organizas las secciones en ese orden."
+
+**Aportó:** una estructura de documentación clara y en el orden en que alguien nuevo necesitaría la información (instalación antes que referencia de endpoints).
+
+### 3. Interpretación de hallazgos de SonarCloud
+> "SonarCloud me reportó estos 3 hallazgos [...]. Para cada uno, explícame primero qué riesgo o problema real representa y por qué Sonar lo marca, antes de darme el código corregido."
+
+**Aportó:** entender que el hallazgo de seguridad (header `X-Powered-By` de Express) exponía la versión del framework, y que los otros dos eran convenciones modernas de Node (prefijo `node:` en imports nativos), no bugs. Los 3 se corrigieron.
+
+### 4. Dockerfile seguro
+> "Genera un Dockerfile sencillo y seguro para esta API [...]. Usa una imagen base ligera y reciente, corre la app con un usuario no-root, y expón el puerto que usa la app. Explícame qué hace cada instrucción y por qué es una buena práctica de seguridad."
+
+**Aportó:** una imagen basada en `node:24-alpine` (ligera, LTS activa), con `npm ci` en vez de `npm install` para builds reproducibles, y ejecución con el usuario `node` en vez de root — verificado con `docker exec <id> whoami`.
+
+### 5. Corrección de vulnerabilidades HIGH detectadas por Trivy
+> "Trivy encontró 6 vulnerabilidades HIGH [...]. Ayúdame a: 1) actualizar los paquetes de Alpine para tomar la versión parchada de OpenSSL, y 2) eliminar npm de la imagen final ya que la app no lo necesita en producción. Explícame cada cambio antes de aplicarlo."
+
+**Aportó:** dos cambios al Dockerfile (`apk update && apk upgrade` para parchar OpenSSL, y borrar `npm`/`npx`/`corepack` de la imagen final). Redujo las vulnerabilidades HIGH de 2 a 0 tras volver a escanear con Trivy.
