@@ -2,4 +2,6 @@ node_modules/
 
 .env
 
-scannerwork/
+.scannerwork/
+
+sonar.project.properties
