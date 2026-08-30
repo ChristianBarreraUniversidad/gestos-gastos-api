@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "node --test tests"
+    "test": "node --test tests",
+    "sonar": "sonar-scanner"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
@@ -16,5 +17,11 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
+  },
+  "sonar": {
+    "serverUrl": "https://sonarcloud.io",
+    "projectKey": "ChristianBarreraUniversidad_gestos-gastos-api",
+    "organization": "christianbarrerauniversidad",
+    "sources": "src"
   }
 }
