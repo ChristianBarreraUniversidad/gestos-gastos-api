@@ -1,5 +1,5 @@
-const fs = require('fs/promises');
-const crypto = require('crypto');
+const fs = require('node:fs/promises');
+const crypto = require('node:crypto');
 const { dataFilePath } = require('../config');
 
 // Lee el archivo JSON completo. Si no existe todavía, lo crea vacío.
