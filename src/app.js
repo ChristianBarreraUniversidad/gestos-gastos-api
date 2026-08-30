@@ -4,6 +4,9 @@ const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
 
+// Evita que Express divulgue el framework usado vía el header X-Powered-By
+app.disable('x-powered-by');
+
 app.use(express.json());
 
 app.use('/api/expenses', expensesRoutes);

@@ -4,4 +4,7 @@ node_modules/
 
 .scannerwork/
 
-sonar.project.properties
+# SonarQube
+.scannerwork/
+.sonar/
+.sonarqube/
