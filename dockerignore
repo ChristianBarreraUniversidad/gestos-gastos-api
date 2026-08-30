@@ -1,0 +1,19 @@
+# Dependencias: se instalan dentro de la imagen con npm ci, no se copian del host
+node_modules
+
+# Nunca debe entrar a la imagen: puede contener secretos y varía por entorno
+.env
+
+# Control de versiones: no aporta nada en runtime, solo pesa
+.git
+.gitignore
+
+# Archivos de desarrollo/documentación: no los necesita el contenedor corriendo
+README.md
+tests
+*.md
+
+# Artefactos y configuración local que no deben viajar a la imagen
+Dockerfile
+.dockerignore
+npm-debug.log

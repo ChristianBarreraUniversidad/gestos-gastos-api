@@ -12,7 +12,7 @@ API REST construida con Node.js y Express para gestionar gastos personales: perm
 1. Clona o descomprime el proyecto y entra a la carpeta:
 
    ```bash
-   cd expense-tracker-api
+   cd gestor-gastos-api
    ```
 
 2. Instala las dependencias:
@@ -99,4 +99,41 @@ Sin body. Ejemplo de respuesta:
 
 ## Docker
 
-<!-- TODO: agregar instrucciones de build y ejecución con Docker -->
+Requiere tener [Docker](https://docs.docker.com/get-docker/) instalado.
+
+### Build
+
+Desde la raíz del proyecto (donde está el `Dockerfile`):
+
+```bash
+docker build -t expense-tracker-api .
+```
+
+### Run
+
+```bash
+docker run -p 3000:3000 --env-file .env expense-tracker-api
+```
+
+- `-p 3000:3000` mapea el puerto del contenedor al de tu máquina (formato `host:contenedor`). Si cambiaste `PORT` en tu `.env`, ajusta el segundo número igual.
+- `--env-file .env` pasa tus variables de entorno al contenedor en tiempo de ejecución. El `.env` **no** viaja dentro de la imagen (está en `.dockerignore` a propósito), así que sin esta bandera la app arranca igual con sus valores por defecto (puerto `3000`).
+
+El servidor queda disponible en `http://localhost:3000`, igual que corriéndolo en local.
+
+### Persistir los datos entre reinicios
+
+Por defecto, `data/expenses.json` vive **dentro** del contenedor: si lo eliminas (`docker rm`), pierdes los gastos guardados. Para que los datos sobrevivan, monta la carpeta `data` de tu máquina como volumen:
+
+```bash
+docker run -p 3000:3000 --env-file .env -v "$(pwd)/data:/app/data" expense-tracker-api
+```
+
+En Windows (PowerShell), reemplaza `$(pwd)` por `${PWD}`.
+
+### Verificar que corre como usuario no-root
+
+```bash
+docker exec <container_id> whoami
+```
+
+Debería responder `node`, no `root` — es la medida de seguridad principal del `Dockerfile` (ver comentarios dentro del archivo para el detalle de cada instrucción).
